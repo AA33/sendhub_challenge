@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Quiet please!</title>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+    <script src="soundmeter.js"></script>
+    <script src="alerter.js"></script>
+</head>
+<body>
+<div ng-controller="AlertCtrl">Hello!
+    <br>
+    <button ng-click="start()">Start Observation</button>
+    <button ng-click="stop()">Stop observation</button>
+    <br>
+    <br>
+    <form name="settings">
+        <label for="contact">Contact: </label>
+        <input id="contact" type="number" name="contact" ng-model="contact" ng-required="true" ng-pattern="phonePattern">
+         <span class="error" ng-show="settings.contact.$error.required">
+    Required!</span>
+        <span class="error" ng-show="settings.contact.$error.pattern">
+    Invalid contact! Must be a 10 digit US phone number</span>
+        <br>
+        <label for="threshold">Threshold: </label>
+        <input id="threshold" type="number" name="threshold" ng-model="threshold" ng-required="true" min="0" max="1">
+
+        <span class="error" ng-show="settings.threshold.$error.min || settings.threshold.$error.max">
+    Number not in valid range! Should be between 0 and 1</span>
+    </form>
+    <br>
+    <span>Highest cumulative output periods with at least 1s above threshold:</span>
+    <ul>
+        <li ng-repeat="high in highestOutputs">
+            Output: {{ high.output }} from {{ high.start }} to {{ high.end }}
+        </li>
+    </ul>
+</div>
+
+
+</body>
+</html>
