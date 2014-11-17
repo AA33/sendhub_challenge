@@ -10,20 +10,28 @@
 <body>
 <div ng-controller="AlertCtrl">Hello!
     <br>
-    <button ng-click="start()">Start Observation</button>
-    <button ng-click="stop()">Stop observation</button>
+    <div ng-show="!running">
+        Click on Start Observation to begin.<br>
+        <button ng-click="start()">Start Observation</button>
+    </div>
+    <div ng-show="running">
+        Click on Stop Observation to end.<br>
+        <button ng-click="stop()">Stop observation</button>
+    </div>
     <br>
-    <br>
+
     <form name="settings">
-        <label for="contact">Contact: </label>
-        <input id="contact" type="number" name="contact" ng-model="contact" ng-required="true" ng-pattern="phonePattern">
+        <label for="contact">Send alert to:</label>
+        <input id="contact" type="number" name="contact" ng-model="contact" ng-required="true"
+               ng-pattern="phonePattern">
          <span class="error" ng-show="settings.contact.$error.required">
     Required!</span>
         <span class="error" ng-show="settings.contact.$error.pattern">
     Invalid contact! Must be a 10 digit US phone number</span>
         <br>
+        <br>
         <label for="threshold">Threshold: </label>
-        <input id="threshold" type="number" name="threshold" ng-model="threshold" ng-required="true" min="0" max="1">
+        <input id="threshold" type="number" name="threshold" ng-model="threshold" ng-required="true" min="0" max="1" style="width:117px;">
 
         <span class="error" ng-show="settings.threshold.$error.min || settings.threshold.$error.max">
     Number not in valid range! Should be between 0 and 1</span>

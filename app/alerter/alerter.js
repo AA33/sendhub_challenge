@@ -22,8 +22,8 @@
         SENDHUB_API_URL: "https://api.sendhub.com/v1/messages/"
     });
 
-    app.controller('AlertCtrl', ['$scope', 'micListener', 'messenger', 'appConstants',
-        function ($scope, micListener, messenger, appConstants) {
+    app.controller('AlertCtrl', ['$scope', '$timeout', 'micListener', 'messenger', 'appConstants',
+        function ($scope, $timeout, micListener, messenger, appConstants) {
 
             var RESPONSE_DURATION = appConstants.RESPONSE_DURATION,
                 THRESHOLD_DURATION = appConstants.THRESHOLD_DURATION,
@@ -38,6 +38,7 @@
             $scope.threshold = DEFAULT_THRESHOLD;
             $scope.phonePattern = /^\d{10}$/;
             $scope.volumeData = [];
+            $scope.running = false;
 
             var highestOutputs = $scope.highestOutputs,
                 volumeData = $scope.volumeData;
@@ -104,11 +105,21 @@
 
             micListener.whenDataReceived($scope, volumeDataHandler);
             $scope.start = function () {
-                micListener.startListenService(RESPONSE_DURATION);
+                if (!$scope.running) {
+                    micListener.startListenService(RESPONSE_DURATION);
+                    $timeout(function(){
+                        $scope.running = true;
+                    },1000);
+                }
             };
 
             $scope.stop = function () {
-                micListener.stopListenService();
+                if ($scope.running) {
+                    micListener.stopListenService();
+                    $timeout(function(){
+                        $scope.running = false;
+                    },1000);
+                }
             };
 
 
